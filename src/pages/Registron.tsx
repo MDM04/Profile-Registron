@@ -3,6 +3,7 @@ import { Form } from "../components/molecules/Form";
 import { Input } from "../components/atoms/Imput";
 import { useForm } from "react-hook-form";
 import { useState } from "react";
+import { Table } from "antd";
 
 interface FormData {
   name: string;
@@ -35,8 +36,27 @@ const ResultsBox = styled.div`
   color: black;
   padding: 15px;
   border-radius: 8px;
-  width: 300px;
+  width: 500px;
 `;
+
+/* 📌 TABELA ANT DESIGN - COLUNAS */
+const columns = [
+  {
+    title: "Nome",
+    dataIndex: "name",
+    key: "name",
+  },
+  {
+    title: "Phone",
+    dataIndex: "phone",
+    key: "phone",
+  },
+  {
+    title: "Email",
+    dataIndex: "email",
+    key: "email",
+  },
+];
 
 export const Registron = () => {
   const {
@@ -46,14 +66,13 @@ export const Registron = () => {
     reset,
   } = useForm<FormData>();
 
-
   const [registros, setRegistros] = useState<FormData[]>([]);
   const [showInfo, setShowInfo] = useState(false);
 
   const onSubmit = (data: FormData) => {
-    setRegistros((prev) => [...prev, data]); // Adiciona no array
+    setRegistros((prev) => [...prev, data]);
     setShowInfo(true);
-    reset(); // Limpa o form
+    reset();
   };
 
   return (
@@ -66,7 +85,7 @@ export const Registron = () => {
           <div style={{ width: "100%" }}>
             <Input
               placeholder="Primeiro Nome:"
-              {...register("name", { required: "Nome obrigatorio" })}
+              {...register("name", { required: "Nome obrigatório" })}
             />
             {errors.name && <ErrorMessage>{errors.name.message}</ErrorMessage>}
           </div>
@@ -74,7 +93,7 @@ export const Registron = () => {
           <div style={{ width: "100%" }}>
             <Input
               placeholder="11 99999-9999"
-              {...register("phone", { required: "Phone obrigatorio" })}
+              {...register("phone", { required: "Phone obrigatório" })}
             />
             {errors.phone && (
               <ErrorMessage>{errors.phone.message}</ErrorMessage>
@@ -86,35 +105,28 @@ export const Registron = () => {
         <Input
           type="email"
           placeholder="Email: joao@email.com"
-          {...register("email", { required: "Email obrigatorio" })}
+          {...register("email", { required: "Email obrigatório" })}
         />
         {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
 
         <button type="submit">Enviar</button>
       </Form>
 
-      {/* LISTA DE REGISTROS */}
+      {/* TABELA DO ANT DESIGN */}
       {showInfo && (
         <ResultsBox>
           <h3>Informações Digitadas</h3>
 
-          {registros.map((item, index) => (
-            <div key={index} style={{ marginBottom: "12px" }}>
-              <p>
-                <strong>Nome:</strong> {item.name}
-              </p>
-              <p>
-                <strong>Phone:</strong> {item.phone}
-              </p>
-              <p>
-                <strong>Email:</strong> {item.email}
-              </p>
-
-              {index < registros.length - 1 && (
-                <hr style={{ margin: "10px 0" }} />
-              )}
-            </div>
-          ))}
+          <Table
+            columns={columns}
+            dataSource={registros.map((item, index) => ({
+              key: index,
+              ...item,
+            }))}
+            pagination={false}
+            bordered
+            style={{ marginTop: "10px" }}
+          />
         </ResultsBox>
       )}
     </Container>
