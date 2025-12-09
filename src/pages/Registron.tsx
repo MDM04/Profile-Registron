@@ -9,6 +9,7 @@ interface FormData {
   name: string;
   phone: number;
   email: string;
+  question: string;
 }
 
 const ErrorMessage = styled.span`
@@ -39,7 +40,34 @@ const ResultsBox = styled.div`
   width: 500px;
 `;
 
-/* 📌 TABELA ANT DESIGN - COLUNAS */
+export const StyledTextarea = styled.textarea`
+  width: 100%;
+  min-height: 120px;
+  padding: 1rem;
+
+  font-size: 1rem;
+  font-family: inherit;
+  color: #333;
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: #fff;
+
+  resize: vertical;
+
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:focus {
+    border-color: #6c63ff;
+    box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: #999;
+  }
+`;
+
 const columns = [
   {
     title: "Nome",
@@ -55,6 +83,11 @@ const columns = [
     title: "Email",
     dataIndex: "email",
     key: "email",
+  },
+  {
+    title: "Pergunta",
+    dataIndex: "question",
+    key: "question",
   },
 ];
 
@@ -80,7 +113,6 @@ export const Registron = () => {
       <h1>Registron Page</h1>
 
       <Form onSubmit={handleSubmit(onSubmit)}>
-        {/* NOME + PHONE LADO A LADO */}
         <Row>
           <div style={{ width: "100%" }}>
             <Input
@@ -100,19 +132,23 @@ export const Registron = () => {
             )}
           </div>
         </Row>
-
-        {/* EMAIL ABAIXO */}
         <Input
           type="email"
           placeholder="Email: joao@email.com"
           {...register("email", { required: "Email obrigatório" })}
         />
         {errors.email && <ErrorMessage>{errors.email.message}</ErrorMessage>}
+        <StyledTextarea
+          placeholder="Pergunte algo Sobre programação"
+          {...register("question", { required: "Pergunta obrigatória" })}
+        />
 
+        {errors.question && (
+          <ErrorMessage>{errors.question.message}</ErrorMessage>
+        )}
         <button type="submit">Enviar</button>
       </Form>
 
-      {/* TABELA DO ANT DESIGN */}
       {showInfo && (
         <ResultsBox>
           <h3>Informações Digitadas</h3>
