@@ -15,6 +15,7 @@ const StyledInput = styled.input`
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label? : string;    
+
 }
 
 export const Input = (props: InputProps) => {
